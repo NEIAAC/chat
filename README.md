@@ -39,8 +39,6 @@ All these plugins should be installed through the Mattermost system console, by 
 
 The **mattermost-plugin-boards** plugin fits the special case of having a very large `tar.gz` bundle (**146MB** at time of writing), this means it usually requires some extra steps and attention to be successfully uploaded to the system console. You must ensure your reverse proxy (e.g NGINX) allows requests larger than this bundle size, and that the Mattermost `Maximum File Size` configuration is also set to a value larger than the bundle size. Additionally, if serving the platform behind a DNS service that offers proxying (e.g Cloudflare), ensure your tier allows for large file uploads, if not you will have to temporarly activate DNS only mode to upload the bundle. For example, the Free plan Cloudflare offers has a 100MB limit on file uploads with their proxy activated, which is not enough to upload the **mattermost-plugin-boards** bundle.
 
-```shell
-
 ## Notes 📝
 
 - To update any of the docker services simply bump the versions in the `image` fields of the `docker-compose.yaml` file and run the `docker compose up --force-recreate` command to restart them with the new version, data will be persisted through the volumes.
