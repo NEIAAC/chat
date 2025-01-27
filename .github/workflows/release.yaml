@@ -1,0 +1,23 @@
+name: release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    outputs:
+      release-created: ${{ steps.metadata.outputs.release_created }}
+    steps:
+      - name: Update project metadata and the release pull request
+        id: metadata
+        uses: googleapis/release-please-action@v4
+        with:
+          release-type: simple
