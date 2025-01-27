@@ -1,0 +1,16 @@
+# IDE
+.idea/
+.vscode/
+xcuserdata/
+
+# Miscellaneous
+.DS_Store
+
+# Dependencies
+node_modules
+
+# Environment
+*.env*
+*.pem*
+|.pem.example
+!.env.example

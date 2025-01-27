@@ -1,0 +1,53 @@
+name: chat
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    pull_policy: always
+    container_name: chat-db
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  mattermost:
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    image: mattermost/mattermost-team-edition:10.3.1
+    pull_policy: always
+    container_name: chat-web    
+    restart: unless-stopped
+    ports:
+      - ${APP_PORT}:8065
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - config:/mattermost/config
+      - data:/mattermost/data
+      - logs:/mattermost/logs
+      - plugins:/mattermost/plugins
+      - client:/mattermost/client/plugins
+      - indexes:/mattermost/bleve-indexes
+    env_file:
+      - .env
+
+volumes:
+  database:
+  config:
+  data:
+  logs:
+  plugins:
+  client:
+  indexes:
