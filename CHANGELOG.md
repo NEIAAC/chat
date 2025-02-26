@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/NEIAAC/chat/compare/v1.1.0...v1.2.0) (2025-02-26)
+
+
+### Features
+
+* bump mattermost version ([20150b6](https://github.com/NEIAAC/chat/commit/20150b689832a9b09e745097def7262f196316e5))
+
 ## [1.1.0](https://github.com/NEIAAC/chat/compare/v1.0.0...v1.1.0) (2025-01-27)
 
 
