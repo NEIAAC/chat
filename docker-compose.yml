@@ -6,7 +6,7 @@ services:
       postgres:
         condition: service_healthy
         restart: true
-    image: mattermost/mattermost-team-edition:10.5.1
+    image: mattermost/mattermost-team-edition:10.6.1
     pull_policy: if_not_present
     container_name: chat-web
     restart: unless-stopped
