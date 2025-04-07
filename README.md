@@ -8,7 +8,6 @@ This repository contains a _Docker Compose_ configuration to run a self-hosted i
 
 ## Requirements 📋
 
-- Docker Engine 25.0.0+
 - Docker Compose 2.24.0+
 
 ## Usage 🚀
@@ -30,6 +29,8 @@ This repository contains a _Docker Compose_ configuration to run a self-hosted i
 In our setup we tend to use a group of plugins that are essencial to get the most out of Mattermost throughout our workflows:
 
 - [mattermost-plugin-boards](https://github.com/mattermost/mattermost-plugin-boards) - This plugin adds a new section to Mattermost that allows users to create and manage boards, lists, and cards views of their tasks, all synced to an in-app calendar page, which essentially removes the need for project management tools external to Mattermost in the team's workflow. **See additional info at the end of this section.**
+
+- [mattermost-plugin-playbooks](https://github.com/mattermost/mattermost-plugin-playbooks) - This plugin adds a new section to Mattermost that allows users to create and manage playbooks, which are essentially templates for recurring tasks or processes. This is useful when there are a lot of repetitive tasks or processes that need to be followed, as it allows these workflows to be standardized, ensuring that everyone is on the same page. Playbooks can be used to create checklists, assign tasks, and track progress.
 
 - [mattermost-plugin-github](https://github.com/mattermost/mattermost-plugin-github) - This plugin adds GitHub integration to Mattermost, we use it to create a channel that keeps track and logs all activity on our repostories, like pull requests, issues, and comments.
 
