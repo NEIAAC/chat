@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/NEIAAC/chat/compare/v1.2.0...v1.2.1) (2025-05-18)
+
+
+### Bug Fixes
+
+* update typos in hard coded vars ([e512983](https://github.com/NEIAAC/chat/commit/e51298318e71200c56ad6fc2fc06aae5e69a75f5))
+
 ## [1.2.0](https://github.com/NEIAAC/chat/compare/v1.1.0...v1.2.0) (2025-02-26)
 
 
