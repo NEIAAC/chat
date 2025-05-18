@@ -1,36 +1,11 @@
 name: chat
 
 services:
-  mattermost:
-    depends_on:
-      postgres:
-        condition: service_healthy
-        restart: true
-    image: mattermost/mattermost-team-edition:10.6.1
-    pull_policy: if_not_present
-    container_name: chat-web
-    restart: unless-stopped
-    ports:
-      - ${APP_PORT}:8065
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - config:/mattermost/config
-      - data:/mattermost/data
-      - logs:/mattermost/logs
-      - plugins:/mattermost/plugins
-      - client:/mattermost/client/plugins
-      - indexes:/mattermost/bleve-indexes
-    env_file:
-      - .env
-
   postgres:
     image: postgres:13-alpine
     pull_policy: if_not_present
     container_name: chat-db
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     volumes:
       - database:/var/lib/postgresql/data
     environment:
@@ -42,6 +17,50 @@ services:
       interval: 2s
       timeout: 5s
       retries: 10
+  mattermost:
+    image: mattermost/mattermost-team-edition:10.6.1
+    pull_policy: if_not_present
+    container_name: chat-web
+    restart: unless-stopped
+    # has built in healthcheck so no need to specify one
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    env_file:
+    - .env
+    ports:
+      - ${APP_PORT}:8065
+    environment:
+      - MM_TEAMSETTINGS_SITENAME=NEI/AAC
+      - MM_TEAMSETTINGS_CUSTOMDESCRIPTIONTEXT="Welcome to the team chat!""
+      - MM_TEAMSETTINGS_ENABLECUSTOMBRAND=true
+      - MM_SUPPORTSETTINGS_HELPLINK=""
+      - MM_SERVICESETTINGS_ENABLEDESKTOPLANDINGPAGE=false
+      - MM_PLUGINSETTINGS_ENABLEUPLOADS=true
+      - MM_PLUGINSETTINGS_AUTOMATICPREPACKAGEDPLUGINS=false
+      - MM_BLEVESETTINGS_ENABLEINDEXING=false
+      - MM_BLEVESETTINGS_INDEXDIR=""
+      - MM_BLEVESETTINGS_ENABLESEARCHING=false
+      - MM_BLEVESETTINGS_ENABLEAUTOCOMPLETE=false
+      - MM_TEAMSETTINGS_ENABLEJOINLEAVEMESSAGEBYDEFAULT=false
+      - MM_TEAMSETTINGS_TEAMMATENAMEDISPLAY=nickname_full_name
+      - MM_EMAILSETTINGS_SKIPSERVERCERTIFICATEVERIFICATION=false
+      - MM_FILESETTINGS_DRIVERNAME=local
+      - MM_FILESETTINGS_DIRECTORY=./data/
+      - MM_METRICSSETTINGS_ENABLENOTIFICATIONMETRICS=false
+      - MM_LOGSETTINGS_ENABLEDIAGNOSTICS=false
+      - MM_SERVICESETTINGS_ENABLEINCOMINGWEBHOOKS=true
+      - MM_SERVICESETTINGS_ENABLEPOSTUSERNAMEOVERRIDE=true
+    volumes:
+      - config:/mattermost/config
+      - data:/mattermost/data
+      - logs:/mattermost/logs
+      - plugins:/mattermost/plugins
+      - client:/mattermost/client/plugins
+      - indexes:/mattermost/bleve-indexes
+
+
 
 volumes:
   database:
