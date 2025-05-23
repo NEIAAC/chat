@@ -44,7 +44,7 @@ services:
       - client:/mattermost/client/plugins
       - indexes:/mattermost/bleve-indexes
   postgres:
-    image: postgres:13-alpine
+    image: postgres:17-alpine
     pull_policy: if_not_present
     container_name: chat-db
     restart: unless-stopped
