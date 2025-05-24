@@ -27,8 +27,3 @@ jobs:
         with:
           config-file: release.json
           manifest-file: .manifest.json
-
-  deploy:
-    needs: [metadata]
-    if: ${{ needs.metadata.outputs.web }}
-    uses: ./.github/workflows/deploy.yaml
