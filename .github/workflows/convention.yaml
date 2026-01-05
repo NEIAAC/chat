@@ -16,6 +16,6 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - uses: amannn/action-semantic-pull-request@335288255954904a41ddda8947c8f2c844b8bfeb # v5.5.3
+      - uses: amannn/action-semantic-pull-request@71b07ef490c9e8ef772f64a62d41545ae5b9ef22 # v5.5.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
