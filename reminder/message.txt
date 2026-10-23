@@ -1,0 +1,39 @@
+THIS FILE IS THE TEXT OF THE MESSAGE THE BOT SENDS (a direct message, Mattermost Markdown format).
+Everything ABOVE the cut line below is only a comment for whoever edits it and is never sent.
+Edit the text below the line; changes are read at the next daily run (no restart needed).
+
+The bot adds no words of its own to a message: every word is here, so writing the message in another
+language is just editing this file.
+
+Available variables (write them exactly like this, with a $ in front; for a literal $ use $$):
+
+  $responsible_name   name of the person who receives the message
+  $co_responsibles    the OTHER people told about the card (empty if there are none)
+  $card_title         title of the card
+  $board_title        name of the board
+  $due_date           due date, e.g.: 2026-10-25
+  $due_year           year of the due date, e.g.: 2026
+  $due_month          month of the due date, two digits, e.g.: 10
+  $due_day            day of the due date, two digits, e.g.: 25
+                      (to write the date your way, e.g. 25/10/2026: $due_day/$due_month/$due_year)
+  $days_left          days left, e.g.: 12 (there is no singular: 1 reads "1 days left")
+  $remind_before      the reminder that triggered this message, in days (7 = the "7 days before" reminder)
+  $card_url           direct link to the card
+
+WARNING: if a variable is followed by a letter, a number or _ (for example the _ of Markdown italics),
+write it with braces: ${board_title}. Without braces, "$board_title_" would be read as another variable.
+
+If you write a variable that does not exist (e.g. $card_titel), the bot refuses to send and writes the error to the logs.
+-----8<-----
+Hi $responsible_name! :wave:
+
+This is an automatic reminder: the information of the card **$card_title** (board _${board_title}_) must be filled in and confirmed by **$due_date** (**$days_left days left**).
+
+Please check that everything is complete and correct:
+- the description;
+- the place;
+- the time.
+
+:point_right: [Open the card]($card_url)
+
+Thank you! :pray:
