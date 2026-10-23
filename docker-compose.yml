@@ -36,6 +36,11 @@ services:
       - MM_LOGSETTINGS_ENABLEDIAGNOSTICS=false
       - MM_SERVICESETTINGS_ENABLEINCOMINGWEBHOOKS=true
       - MM_SERVICESETTINGS_ENABLEPOSTUSERNAMEOVERRIDE=true
+      # lets the /remind_* slash commands reach the reminder bot (it is a container on this network;
+      # Mattermost refuses to call private addresses unless the name is listed here). This REPLACES
+      # whatever the System Console holds for this setting: if it lists hosts already, keep them here too,
+      # separated by spaces (e.g. "existing.example reminder").
+      - MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS=reminder
     volumes:
       - config:/mattermost/config
       - data:/mattermost/data
@@ -60,6 +65,40 @@ services:
       timeout: 5s
       retries: 10
 
+  # Sends a private message to the Notifyees of a Boards card on the days listed in its Remind Before.
+  # Source, setup and behaviour: https://github.com/NEIAAC/remindabot
+  # System administrators control it from chat with /remind_status, /remind_send, ... after a one-time
+  # `docker compose run --rm -e REMINDER_ADMIN_TOKEN=... reminder python -m remindabot --register-commands`.
+  # Its chat-command port (8080) is only for Mattermost, on this network: never publish it.
+  reminder:
+    # published by the bot's repository for every release (its release workflow); like the other
+    # services it names an exact version, which you bump to update. The package is private: the server
+    # must have run `docker login ghcr.io` once (see the Reminders section of README.md)
+    image: ghcr.io/neiaac/remindabot:1.0.0
+    container_name: chat-reminder
+    restart: unless-stopped
+    depends_on:
+      mattermost:
+        condition: service_healthy
+    # the bot only needs to read /config and write /data (a volume) and /tmp: nothing else, and no extra rights
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=${TZ}
+      - REMINDER_TZ=${TZ}
+      - REMINDER_MM_URL=http://mattermost:8065
+      - REMINDER_SITE_URL=https://${DOMAIN}
+      - REMINDER_BOT_TOKEN=${REMINDER_BOT_TOKEN}
+    volumes:
+      # our wording of the message, re-read on every daily run (no rebuild needed)
+      - ./reminder/message.txt:/config/message.txt:ro
+      - reminder:/data
+
 
 volumes:
   database:
@@ -69,3 +108,4 @@ volumes:
   plugins:
   client:
   indexes:
+  reminder:

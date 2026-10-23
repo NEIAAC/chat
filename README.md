@@ -40,6 +40,18 @@ All these plugins should be installed through the Mattermost system console, by 
 
 The **mattermost-plugin-boards** plugin fits the special case of having a very large `tar.gz` bundle (**146MB** at time of writing), this means it usually requires some extra steps and attention to be successfully uploaded to the system console. You must ensure your reverse proxy (e.g NGINX) allows requests larger than this bundle size, and that the Mattermost `Maximum File Size` configuration is also set to a value larger than the bundle size. Additionally, if serving the platform behind a DNS service that offers proxying (e.g Cloudflare), ensure your tier allows for large file uploads, if not you will have to temporarly activate DNS only mode to upload the bundle. For example, the Free plan Cloudflare offers has a 100MB limit on file uploads with their proxy activated, which is not enough to upload the **mattermost-plugin-boards** bundle.
 
+## Reminders 🔔
+
+The `reminder` service is a small bot that sends a private message to the **Notifyees** of a Boards card on the days listed in its **Remind Before** property (a **Text** property such as `7;3;1`) before its **Due Date**, so they remember to fill in the information of the post. Its code lives in its own repository, [NEIAAC/remindabot](https://github.com/NEIAAC/remindabot), where setup, behaviour and configuration are documented. Like the other services it is a pinned image (`ghcr.io/neiaac/remindabot:<version>`, published by that repository for every release): bump the version in the `image` field, like for the others, to update it. The package is private, so the server must log in to `ghcr.io` once with a read-only token (`docker login`, see "If the package is private" in the bot's [setup guide](https://github.com/NEIAAC/remindabot/blob/main/docs/setup.md)), and Dependabot will not propose new versions: watch the bot's Releases page. Only our configuration lives here: the service in `docker-compose.yml`, the `REMINDER_BOT_TOKEN` in `.env`, and the wording of the message in [reminder/message.txt](./reminder/message.txt).
+
+System administrators can control the bot from chat (`/remind_status`, `/remind_send`, `/remind_setmessage`, `/remind_setsend`, ... `/remind_help` lists them). Once, after the bot is running, register the commands with a system administrator's token (used for that one run only; Mattermost needs `MM_SERVICESETTINGS_ALLOWEDUNTRUSTEDINTERNALCONNECTIONS=reminder`, already set in `docker-compose.yml`. A variable overrides the System Console, so if *Environment > Developer > Allow untrusted internal connections* already lists hosts, add them to the variable too, separated by spaces):
+
+```shell
+docker compose run --rm -e REMINDER_ADMIN_TOKEN=<admin token> reminder python -m remindabot --register-commands
+```
+
+A message or time set from chat is stored in the bot's volume and wins over `reminder/message.txt` and the compose file until `/remind_reset`.
+
 ## Notes 📝
 
 - To update any of the docker services simply bump the versions in the `image` fields of the `docker-compose.yaml` file and run the `docker compose up --force-recreate` command to restart them with the new version, data will be persisted through the volumes.
