@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/NEIAAC/chat/compare/v1.3.0...v1.4.0) (2026-10-23)
+
+
+### Features
+
+* Add remindabot ([#38](https://github.com/NEIAAC/chat/issues/38)) ([cfefce1](https://github.com/NEIAAC/chat/commit/cfefce1b28f98d9f2ffa01001c7dd2c4c74a877d))
+
 ## [1.3.0](https://github.com/NEIAAC/chat/compare/v1.2.1...v1.3.0) (2025-05-18)
 
 
