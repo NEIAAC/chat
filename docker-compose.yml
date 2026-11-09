@@ -74,7 +74,7 @@ services:
     # published by the bot's repository for every release (its release workflow); like the other
     # services it names an exact version, which you bump to update. The package is private: the server
     # must have run `docker login ghcr.io` once (see the Reminders section of README.md)
-    image: ghcr.io/neiaac/remindabot:1.0.0
+    image: ghcr.io/neiaac/remindabot:1.1.0
     container_name: chat-reminder
     restart: unless-stopped
     depends_on:
